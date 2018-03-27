@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        Title
+    </title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style type="text/css">
+        body {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+<div id="root">
+    <div>
+        <h1>{{appName}}</h1>
+        <messages :removemessage="removemessage" :chat="messages"></messages>
+        <chatform :totalmessages="messages.length" :save="save"></chatform>
+    </div>
+</div>
+<!-- templates -->
+<template id="messages-list">
+    <div>
+        <ul class="list-group">
+            <li class="list-group-item" v-for="m,index in chat">
+                <messageitem :message="m"></messageitem>
+                <removemessage :removemessagefunction="removemessage"></removemessage>
+                <span style="position: relative;left: -50px;" class="pull-right">Date: {{getRelativeTime(m.time)}}</span>
+            </li>
+            <div v-if="chat.length <= 0">
+                <div class="alert alert-info">
+                    <p>
+                        NO Messages
+                    </p>
+                </div>
+            </div>
+        </ul>
+    </div>
+</template>
+<template id="remove_message">
+<span>
+<a v-on:click="removemessagefunction()" class="close">X</a>
+</span>
+</template>
+<template id="message-item">
+    <span>{{message.text}}</span>
+</template>
+<template id="chat-form">
+    <div>
+        <form v-on:submit.prevent="save(message),empty()">
+            <label>Your Message</label>
+            <input v-model="message" type="text" class="form-control"/>
+            <div v-if="hasErrors" class="alert alert-danger">
+                <p>
+                    Please enter a message.
+                </p>
+            </div>
+            <button class="btn btn-info">Send</button>
+            <span class="pull-right badge badge-info">
+{{totalmessages}}
+</span>
+        </form>
+    </div>
+</template>
+<!-- templates -->
+<script type="text/javascript" src="vuex.js"></script>
+<script type="text/javascript" src="vue.min.js"></script>
+<script type="text/javascript" src="apps"></script>
+</body>
+</html>
